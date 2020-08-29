@@ -63,7 +63,9 @@ io.on('connection', (socket) => {
         lineChat.pushMessage(lineId, {
             type: "text",
             text: message
-        })
+        }).catch(error => {
+          console.error('error', error);
+        });
       sendStatus({
         success: true,
         message: 'Message updating...'
