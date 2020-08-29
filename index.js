@@ -21,7 +21,6 @@ const server = express.listen(process.env.PORT || 3000);
 const lineChat = new line.Client(line_config);
 const io = socketIO(server);
 
-
 // -----------------------------------------------------------------------------
 // ルーター設定
 express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
