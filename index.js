@@ -32,6 +32,13 @@ express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         if (event.type == "message" && event.message.type == "text"){
             //events_processed.push();
             io.to(socketId).emit('msg_line_to_sf', event.message.text)
+            if (event.message.text == "こんにちは"){
+              // replyMessage()で返信し、そのプロミスをevents_processedに追加。
+              lineChat.replyMessage(event.replyToken, {
+                  type: "text",
+                  text: "これはこれは"
+              });
+          }
         }
     });
 });
