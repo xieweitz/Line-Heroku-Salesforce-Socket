@@ -52,8 +52,6 @@ io.on('connection', (socket) => {
   socket.on('msg_sf_to_line', (data) => {
     const lineId = data.lineId;
     const message = data.message;
-    console.log("lineId:"+lineId);
-    console.log("message:"+message);
     if (!lineId || !message) {
       sendStatus({
         success: false,
