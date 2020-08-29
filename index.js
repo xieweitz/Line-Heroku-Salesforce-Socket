@@ -28,9 +28,6 @@ express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     // 先行してLINE側にステータスコード200でレスポンスする。
     res.sendStatus(200);
 
-    // すべてのイベント処理のプロミスを格納する配列。
-    let events_processed = [];
-
     // イベントオブジェクトを順次処理。
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
@@ -39,13 +36,6 @@ express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
             io.to(socketId).emit('msg_line_to_sf', event.message.text)
         }
     });
-
-    // すべてのイベント処理が終了したら何個のイベントが処理されたか出力。
-    Promise.all(events_processed).then(
-        (response) => {
-            console.log(`${response.length} event(s) processed.`);
-        }
-    );
 });
 
 io.on('connection', (socket) => {
