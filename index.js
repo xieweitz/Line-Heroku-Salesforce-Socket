@@ -3,7 +3,6 @@
 const express = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const socketIO = require('socket.io');
-const redis = require('socket.io-redis');
 socketId='';
 
 // -----------------------------------------------------------------------------
