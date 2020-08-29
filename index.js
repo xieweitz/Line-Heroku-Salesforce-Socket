@@ -31,7 +31,7 @@ express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
             //events_processed.push();
-            io.to(socketId).emit('msg_line_to_sf', event.message.text)
+            io.to(socketId).emit('msg_line_to_sf', event.message.text);
             if (event.message.text == "こんにちは"){
               // replyMessage()で返信し、そのプロミスをevents_processedに追加。
               lineChat.replyMessage(event.replyToken, {
@@ -64,9 +64,9 @@ io.on('connection', (socket) => {
         message: 'Please enter a lineId and message'
       });
     } else {
-        lineChat.pushMessage(lineId, {
+        lineChat.pushMessage('Uca40e8c45ac1c8e691483b27ed5d13fa', {
             type: "text",
-            text: message
+            text: "これはこれは"
         }).catch(error => {
           console.error('error', error);
         });
