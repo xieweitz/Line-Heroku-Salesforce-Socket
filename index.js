@@ -30,15 +30,15 @@ express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
     req.body.events.forEach((event) => {
         // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
         if (event.type == "message" && event.message.type == "text"){
-            console.log("socketId:"+this.socketId);
+            console.log("socketId:"+socketId);
             console.log("event.message.text:"+event.message.text);
-            io.to(this.socketId).emit('msg_line_to_sf', event.message.text);
+            io.to(socketId).emit('msg_line_to_sf', event.message.text);
         }
     });
 });
 
 io.on('connection', (socket) => {
-  this.socketId = socket.id;
+  socketId = socket.id;
   /**
    * Create function to send status
    * @param success {bool}
