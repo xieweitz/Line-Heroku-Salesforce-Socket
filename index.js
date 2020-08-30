@@ -14,7 +14,7 @@ const line_config = {
 
 // -----------------------------------------------------------------------------
 // Webサーバー設定
-const server = express.listen(process.env.PORT || 3000);
+const server = express.listen(process.env.PORT || 3001);
 
 // APIコールのためのクライアントインスタンスを作成
 const lineChat = new line.Client(line_config);
