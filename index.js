@@ -6,7 +6,7 @@ socketId='';
 
 // パラメータ設定
 const line_config = {
-    channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
+    channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
 // APIコールのためのクライアントインスタンスを作成
@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
       });
     } else {
         lineChat.pushMessage(lineId, {
-            type: "text",
+            type: 'text',
             text: message,
         }).catch(error => {
           console.error('error', error);
