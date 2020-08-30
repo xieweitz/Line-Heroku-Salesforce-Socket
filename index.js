@@ -1,44 +1,24 @@
-// -----------------------------------------------------------------------------
 // モジュールのインポート
 const express = require("express")();
 const line = require("@line/bot-sdk"); // Messaging APIのSDKをインポート
 const socketIO = require('socket.io');
 socketId='';
 
-// -----------------------------------------------------------------------------
 // パラメータ設定
 const line_config = {
     channelAccessToken: process.env.LINE_ACCESS_TOKEN, // 環境変数からアクセストークンをセットしています
     channelSecret: process.env.LINE_CHANNEL_SECRET // 環境変数からChannel Secretをセットしています
 };
-
-// -----------------------------------------------------------------------------
-// Webサーバー設定
-const server = express.listen(process.env.PORT || 3001);
-
 // APIコールのためのクライアントインスタンスを作成
 const lineChat = new line.Client(line_config);
+
+// Webサーバー設定
+const server = express.listen(process.env.PORT || 4000);
+// Socket通信設定
 const io = socketIO(server);
-
-// -----------------------------------------------------------------------------
-// ルーター設定
-express.post('/bot/webhook', line.middleware(line_config), (req, res, next) => {
-    // 先行してLINE側にステータスコード200でレスポンスする。
-    res.sendStatus(200);
-
-    // イベントオブジェクトを順次処理。
-    req.body.events.forEach((event) => {
-        // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
-        if (event.type == "message" && event.message.type == "text"){
-            console.log("socketId:"+socketId);
-            console.log("event.message.text:"+event.message.text);
-            io.to(socketId).emit('msg_line_to_sf', event.message.text);
-        }
-    });
-});
-
 io.on('connection', (socket) => {
   socketId = socket.id;
+  console.log("接続する時のsocketId:"+socketId);
   /**
    * Create function to send status
    * @param success {bool}
@@ -70,4 +50,20 @@ io.on('connection', (socket) => {
     }
   })
   socket.on('disconnect', () => console.log('Client disconnected'));
+});
+
+// ルーター設定
+express.post('/line', line.middleware(line_config), (req, res, next) => {
+  // 先行してLINE側にステータスコード200でレスポンスする。
+  res.sendStatus(200);
+
+  // イベントオブジェクトを順次処理。
+  req.body.events.forEach((event) => {
+      // この処理の対象をイベントタイプがメッセージで、かつ、テキストタイプだった場合に限定。
+      if (event.type == "message" && event.message.type == "text"){
+          console.log("Lineから送信する時のsocketId:"+socketId);
+          console.log("event.message.text:"+event.message.text);
+          io.to(socketId).emit('msg_line_to_sf', event.message.text);
+      }
+  });
 });
