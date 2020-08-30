@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
     } else {
         lineChat.pushMessage(lineId, {
             type: "text",
-            text: message
+            text: message,
         }).catch(error => {
           console.error('error', error);
         });
